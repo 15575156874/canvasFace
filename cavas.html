@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./jscolor.js"></script>
+</head>
+
+<body>
+  <canvas id="can"></canvas>
+  <canvas id="logo" style="transform: rotate(-15deg);
+  position: absolute;
+  left: 203px;
+  top: 148px;"></canvas>
+  <div>切换颜色</div>
+  <input class="jscolor" id='clothes'>
+  <input class="jscolor" id='hat'>
+  <div id='img_logo' style="    background-color: #e8dcdc;">
+  </div>
+  <div id='img_face' style="    background-color: #e8dcdc;">
+  </div>
+</body>
+<script>
+  var color = {
+    clothes: "#020bd6",
+    hat: "#020bd6",
+    img_face: './face/2-yezi.png',
+    img_logo: './logo/logo1.png'
+  }
+  var imgLogoList = [
+    './logo/logo1.png', './logo/logo2.png', './logo/logo3.png'
+  ]
+  var imgFaceList = [
+    './face/1-yezi.png', './face/2-yezi.png', './face/3-yezi.png'
+  ]
+  for (let i in imgLogoList) {
+    const img_logo = new Image()
+    img_logo.src = imgLogoList[i]
+    img_logo.style.width = "30%"
+    img_logo.onload = function () {
+      color.img_logo = img_logo
+      document.getElementById('img_logo').appendChild(img_logo)
+    }
+    img_logo.addEventListener('click', function () {
+      color.img_logo = img_logo
+      draw()
+    })
+  }
+  for (let i in imgFaceList) {
+    const img_face = new Image()
+    img_face.src = imgFaceList[i]
+    img_face.style.width = "30%"
+    img_face.onload = function () {
+      color.img_face = img_face
+      document.getElementById('img_face').appendChild(img_face)
+    }
+    img_face.addEventListener('click', function () {
+      color.img_face = img_face
+      draw()
+    })
+  }
+
+  document.getElementById("clothes").addEventListener("change", function (e) {
+    console.log("select", e.target.value);
+    color.clothes = "#" + e.target.value
+    // color.hat="#"+e.target.value
+    draw()
+  });
+  document.getElementById("hat").addEventListener("change", function (e) {
+    console.log("select", e.target.value);
+    color.hat = "#" + e.target.value
+    // color.hat="#"+e.target.value
+    draw()
+  });
+  draw()
+  function draw() {
+    var canvas = document.getElementById("can");
+    canvas.width = 500;
+    canvas.height = 500;
+    var ctx = canvas.getContext("2d");
+    ctx.lineWidth = 6
+    console.log(color)
+    head()
+    face()
+    neck()
+    clouse()
+    ear()
+    poli()
+    drowFace()
+    drowLogo()
+    //drowLine()
+    function drowLine() {
+      ctx.lineWidth = 1
+      ctx.strokeStyle = '#333'
+      ctx.beginPath()
+      ctx.moveTo(0, 0)
+      ctx.lineTo(0, 500)
+      for (let i = 0; i < 22; i++) {
+        ctx.moveTo(0, i * 25)
+        ctx.lineTo(500, i * 25)
+      }
+      for (let i = 0; i < 22; i++) {
+        ctx.moveTo(i * 25, 0)
+        ctx.lineTo(i * 25, 500)
+      }
+      ctx.stroke()
+    }
+    function poli() { //磨平线条
+      ctx.beginPath()
+      ctx.lineWidth = 3
+      ctx.strokeStyle = '#fff'
+      ctx.moveTo(184, 500 - 196)
+      ctx.lineTo(301, 500 - 179)
+      ctx.stroke()
+    }
+    function drowFace() {
+      ctx.drawImage(color.img_face, 200, 200, 150, 100)  //画脸
+    }
+    function drowLogo() {
+      var canvas_logo = document.getElementById("logo")
+      var ctx_logo = canvas_logo.getContext("2d");
+      canvas_logo.width = 100;
+      canvas_logo.height = 100;
+      ctx_logo.drawImage(color.img_logo, 0, 0, 90, 40)
+    }
+    function ear() {
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.fillStyle = "#fff";
+      ctx.moveTo(116, 189);
+      ctx.bezierCurveTo(95, 163, 88, 89, 173, 126);
+      ctx.closePath()
+      ctx.fill()
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(277, 108);
+      ctx.bezierCurveTo(306, 94, 316, 125, 314, 137);
+      ctx.stroke();
+    }
+    function clouse() {
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = "black";
+      ctx.fillStyle = color.clothes; //衣服的颜色
+      ctx.beginPath();
+      ctx.moveTo(309, 320);
+      ctx.bezierCurveTo(313, 354, 220, 365, 132, 315);
+      ctx.lineTo(132, 375)
+      ctx.lineTo(309, 375)
+      ctx.closePath()
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.strokeStyle = "#fff"; //领子的颜色
+      ctx.lineWidth = 25;
+      ctx.moveTo(315, 375);
+      ctx.bezierCurveTo(290, 380, 214, 380, 127, 365);
+      ctx.stroke();
+
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = "#fff";
+      ctx.beginPath();
+      ctx.moveTo(166, 331)
+      ctx.lineTo(161, 390)
+      ctx.moveTo(275, 350)
+      ctx.lineTo(280, 390)
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(309, 320);
+      ctx.bezierCurveTo(313, 354, 220, 365, 132, 315);
+      // ctx.moveTo(147, 347);
+      // ctx.bezierCurveTo(145, 391, 142, 366, 149, 327);
+      ctx.stroke();
+    }
+    function neck() {
+      ctx.fillStyle = "black";   //选择油漆桶的颜色
+      ctx.strokeStyle = "black";
+      ctx.beginPath();
+      ctx.moveTo(315, 324);
+      ctx.bezierCurveTo(295, 372, 140, 343, 123, 295);
+      ctx.moveTo(123, 295);
+      ctx.bezierCurveTo(192, 276, 147, 338, 315, 323);
+      ctx.fill()
+      ctx.stroke();
+      ctx.fill()
+      ctx.beginPath(); //领结
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
+      ctx.moveTo(285, 328);
+      ctx.lineTo(253, 328)
+      ctx.lineTo(253, 338)
+      ctx.lineTo(285, 333);
+      ctx.closePath()
+      ctx.fill()
+    }
+    function face() {
+      ctx.beginPath();
+      ctx.moveTo(319, 177);
+      ctx.bezierCurveTo(452, 325, 249, 375, 158, 290);
+      ctx.moveTo(319, 177);
+      ctx.bezierCurveTo(99, 218, 166, 258, 158, 290);
+      ctx.fillStyle = "#fff";   //选择油漆桶的颜色
+      ctx.strokeStyle = "black";
+      ctx.fill()
+      ctx.stroke();
+
+      ctx.beginPath()//左边飘带
+      ctx.moveTo(177, 220);
+      ctx.bezierCurveTo(167, 248, 167, 271, 179, 305);
+      ctx.stroke();
+
+      ctx.beginPath()//左边飘带
+      ctx.moveTo(166, 230);
+      ctx.bezierCurveTo(162, 253, 159, 279, 179, 305);
+      ctx.stroke();
+
+      ctx.beginPath();  //右边飘带
+      ctx.moveTo(339, 172);
+      ctx.bezierCurveTo(338, 191, 344, 195, 349, 215);
+      ctx.stroke();
+    }
+    function head() {
+      ctx.beginPath();  //帽子
+      ctx.moveTo(122, 296);
+      ctx.bezierCurveTo(5, 138, 231, 17, 324, 147);
+
+      ctx.moveTo(323, 147);
+      ctx.bezierCurveTo(402, 181, 267, 173, 172, 223);
+
+      ctx.moveTo(172, 223);
+      ctx.bezierCurveTo(126, 255, 189, 310, 121, 296);
+      ctx.strokeStyle = "black"
+      ctx.fillStyle = color.hat
+      ctx.fill()
+      ctx.stroke();
+    }
+  }
+
+</script>
+<!--     background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoL…EEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADknwgPmfR/rFT8KOtnJPhAfM+j/WKn4UB//9k=);
+    background-size: 57%;
+    background-repeat: no-repeat;
+    background-position: 40% 37%; -->
+
+</html>
